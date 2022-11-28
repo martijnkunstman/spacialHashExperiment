@@ -1,10 +1,19 @@
 let sizeWH = 500;
-let cellCount = 10;
-let pointCount = 1000;
+let cellCount = 25;
+let pointCount = 2000;
 let points = [];
 let cells = [];
 
+let frameTimeElement = document.getElementById('frameTime');
+let frameRateElement = document.getElementById('frameRate');
+let nCountElement = document.getElementById('nCount');
+let shCountElement = document.getElementById('shCount');
+let timesFasterElement = document.getElementById('timesFaster'); 
+
+//p5.disableFriendlyErrors = true; // disables FES
+
 function setup() {
+  
   //pixelDensity(1);
   createCanvas(sizeWH, sizeWH);
   for (let i = 0; i < pointCount; i++) {
@@ -43,17 +52,22 @@ function setup() {
       );
     }
   }
+  nCountElement.innerHTML = "n squared operations:"+(pointCount * pointCount);
 }
-
+let currentTime = 0;
+let oldTime = 0;
 function draw() {
+  currentTime = millis()-oldTime;
+  oldTime = millis();
+  frameTimeElement.innerHTML = "time:"+Math.round(currentTime);
+  frameRateElement.innerHTML = "frameRate:"+Math.round(frameRate());
   for (let i = 0; i < points.length; i++) {
     points[i][2] = 0;
   }
-   counter = 0;
+  counter = 0;
   space();
-  fill("red");
-  textSize(16);
-  text(counter, 10, 10 + 16);
+  shCountElement.innerHTML = "spacial hash operations:"+counter;
+  timesFasterElement.innerHTML = "times faster:" +Math.round((pointCount * pointCount)/counter);
 
   for (let i = 0; i < points.length; i++) {
     if (
@@ -77,10 +91,6 @@ function draw() {
     }
     square(points[i][0] - 1.5, points[i][1] - 1.5, 3);
   } 
-  counter = pointCount * pointCount;
-  fill("blue");
-  textSize(16);
-  text(counter, 10, sizeWH - 10);
 }
 let printme = true;
 let counter = 0;
